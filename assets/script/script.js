@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const cards = document.querySelector('.main__cards')
     let offset = 0;
     let limit = 19;
+    let finalized = false;
 
     const response = await fetch(`${api}/?limit=${1292}`);
     const data = await response.json();
@@ -70,20 +71,35 @@ document.addEventListener('DOMContentLoaded', async () => {
             const pokemonData = await fetchUrl(data.results[offset].url);
             const pokemonImage = `${otherSpritesApi}${pokemonData.id}.png`;
             createCard(pokemonData.name, pokemonData.id, pokemonData.types, pokemonImage);
-            await new Promise(r => setTimeout(r, 150));
+            await new Promise(r => setTimeout(r, 50));
         }
     }
 
     try {
         getPokemon();
+        countPokemon.innerHTML = `${data.count} pokemons`;
+        finalized = true;
     } catch (error) {
         console.log(error);
     }
 
-    document.addEventListener('scroll', () => {
+    document.addEventListener('scroll', async () => {
         if (document.body.scrollHeight - window.scrollY === window.innerHeight) {
-            limit += 20;
-            getPokemon();
+            try {
+                if (finalized) {
+                    finalized = false;
+                    await new Promise(r => setTimeout(r, 500));
+                    limit += 20;
+                    offset = limit - 19;
+                    console.log(limit, offset);
+                    getPokemon();
+                    finalized = true;
+                }
+            } catch (error) {
+                limit -= 20;
+                offset = limit - 19;
+                console.log(error);
+            }
         }
     });
 
