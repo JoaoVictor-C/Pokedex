@@ -78,6 +78,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         getPokemon();
         countPokemon.innerHTML = `${data.count} pokemons`;
+        console.log(data.count)
         finalized = true;
     } catch (error) {
         console.log(error);
