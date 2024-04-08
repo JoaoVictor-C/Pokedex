@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const pokemonData = await fetchUrl(data.results[offset].url);
             const pokemonImage = `${otherSpritesApi}${pokemonData.id}.png`;
             createCard(pokemonData.name, pokemonData.id, pokemonData.types, pokemonImage);
-            await new Promise(r => setTimeout(r, 50));
+            await new Promise(r => setTimeout(r, 20));
         }
     }
 
